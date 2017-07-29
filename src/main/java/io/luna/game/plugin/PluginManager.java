@@ -72,6 +72,7 @@ public final class PluginManager {
         plugins.add(new LogoutPlugin());
         plugins.add(new RingPlugin());
         plugins.add(new CasketPlugin());
+        plugins.add(new FillItemPlugin());
     }
 
     public void init() throws IOException {
