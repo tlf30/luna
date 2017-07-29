@@ -13,15 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A manager for plugins that loads and managers each plugin.
- * 
+ *
  * Used for jar based plugins
- * 
+ *
  * @author Trevor Flynn {@literal <trevorflynn@liquidcrystalstudios.com>}
  */
 public final class PluginManager {
+
+    /**
+     * The asynchronous logger.
+     */
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private final LunaContext context;
     private List<Plugin> plugins = new ArrayList<>();
@@ -32,17 +39,17 @@ public final class PluginManager {
     public PluginManager(LunaContext context) {
         this.context = context;
     }
-    
+
     public void load() throws MalformedURLException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         File pluginDir = new File(PLUGIN_DIR);
         File[] files = pluginDir.listFiles();
-        ArrayList<URL> modFiles = new ArrayList<>();
+        ArrayList<URL> pluginFiles = new ArrayList<>();
         for (File s : files) {
-            if (s.getName().endsWith(".jar")) {
-                modFiles.add(s.toURI().toURL());
+            if (s.getName().endsWith(".jar")) { //Get only jar files
+                pluginFiles.add(s.toURI().toURL());
             }
         }
-        URL[] importableMods = modFiles.toArray(new URL[modFiles.size()]);
+        URL[] importableMods = pluginFiles.toArray(new URL[pluginFiles.size()]);
         ClassLoader loader = new URLClassLoader(importableMods, ClassLoader.getSystemClassLoader()); //Build a classloader from the system classloader 
         for (URL jar : importableMods) { //Get each jar
             String[] classes = getClasses(jar); //Check class path
@@ -55,25 +62,43 @@ public final class PluginManager {
             }
         }
     }
-    
-    public void init() {
+
+    public void init() throws IOException {
+        File configDir = new File(CONFIG_DIR);
+        if (!configDir.exists()) {
+            configDir.mkdirs();
+        }
         for (Plugin plugin : plugins) {
-            plugin.init(context, new File(CONFIG_DIR + File.separator + plugin.getName()));
+            File configFile = new File(CONFIG_DIR + File.separator + plugin.getName());
+            if (!configFile.exists()) {
+                configFile.createNewFile();
+            }
+            try {
+                plugin.init(context, configFile);
+            } catch (Exception ex) {
+                LOGGER.error("Could not init plugin " + plugin.getName());
+                LOGGER.catching(ex);
+            }
         }
     }
-    
+
     public void start() {
         for (Plugin plugin : plugins) {
-            plugin.start();
+            try {
+                plugin.start();
+            } catch (Exception ex) {
+                LOGGER.error("Could not start plugin " + plugin.getName());
+                LOGGER.catching(ex);
+            }
         }
     }
-    
+
     public void post(Event event) {
         for (Plugin plugin : plugins) {
             plugin.event(event);
         }
     }
-    
+
     private boolean isPlugin(Class c) {
         if (c.isSynthetic() || c.isAnnotation() || c.isEnum() || c.isInterface()
                 || c.isLocalClass() || c.isMemberClass() || c.isPrimitive()
@@ -81,7 +106,7 @@ public final class PluginManager {
             //We do not want any of these
             return false;
         }
-       //Get the interfaces
+        //Get the interfaces
         for (Class inf : c.getInterfaces()) {
             if (inf.isAssignableFrom(Plugin.class)) {
                 //If it is an instance of plugin, we want it
