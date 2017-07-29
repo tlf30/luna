@@ -41,6 +41,7 @@ public final class PluginManager {
     }
 
     public void load() throws MalformedURLException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        loadDefaultPlugins();
         File pluginDir = new File(PLUGIN_DIR);
         File[] files = pluginDir.listFiles();
         ArrayList<URL> pluginFiles = new ArrayList<>();
@@ -56,11 +57,21 @@ public final class PluginManager {
             for (String classpath : classes) {
                 Class plugin = loader.loadClass(classpath);
                 if (isPlugin(plugin)) { //If class is a plugin, add it
-                    Plugin plugininstance = (Plugin) plugin.newInstance();
-                    plugins.add(plugininstance);
+                    Plugin pluginInstance = (Plugin) plugin.newInstance();
+                    LOGGER.info("Loaded plugin: " + pluginInstance.getName() + ":" + pluginInstance.getVersionID());
+                    plugins.add(pluginInstance);
                 }
             }
         }
+    }
+    
+    private void loadDefaultPlugins() {
+        plugins.add(new AnnouncementsPlugin());
+        plugins.add(new RunPlugin());
+        plugins.add(new BankPlugin());
+        plugins.add(new LogoutPlugin());
+        plugins.add(new RingPlugin());
+        plugins.add(new CasketPlugin());
     }
 
     public void init() throws IOException {
