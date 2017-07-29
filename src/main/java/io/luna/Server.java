@@ -11,7 +11,6 @@ import io.luna.game.model.def.ItemDefinition;
 import io.luna.game.model.def.NpcCombatDefinition;
 import io.luna.game.model.def.NpcDefinition;
 import io.luna.game.model.def.ObjectDefinition;
-import io.luna.game.plugin.PluginBootstrap;
 import io.luna.game.plugin.PluginManager;
 import io.luna.net.LunaChannelInitializer;
 import io.luna.net.msg.MessageRepository;
@@ -85,8 +84,8 @@ public final class Server {
         initNetwork();
         LOGGER.info("Luna is now online on port {}!", box(LunaConstants.PORT));
 
-        PluginManager plugins = context.getPlugins();
-        plugins.post(ServerLaunchEvent.INSTANCE);
+        startPlugins();
+        context.getPlugins().post(ServerLaunchEvent.INSTANCE);
     }
 
     /**
@@ -113,11 +112,18 @@ public final class Server {
     }
 
     /**
-     * Initializes the plugin bootstrap.
+     * Loads and inits all plugins.
      */
-    private void initPlugins() throws Exception {
-        PluginBootstrap bootstrap = new PluginBootstrap(context);
-        bootstrap.load(launchPool);
+    private void initPlugins() {
+        context.getPlugins().load();
+        context.getPlugins().init();
+    }
+    
+    /**
+     * Starts all plugins
+     */
+    private void startPlugins() {
+        context.getPlugins().start();
     }
 
     /**

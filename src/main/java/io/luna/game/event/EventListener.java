@@ -1,6 +1,5 @@
 package io.luna.game.event;
 
-import io.luna.game.plugin.PluginFailureException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,7 +42,7 @@ public final class EventListener<E extends Event> {
     /**
      * Applies the wrapped function and handles exceptions.
      */
-    public void apply(E msg) throws PluginFailureException {
+    public void apply(E msg) {
         try {
             if (args == EventArguments.NO_ARGS) {
                 listener.accept(msg);
@@ -51,10 +50,8 @@ public final class EventListener<E extends Event> {
                 listener.accept(msg);
                 msg.terminate();
             }
-        } catch (PluginFailureException failure) { // fail, recoverable
+        } catch (Exception failure) { // fail, recoverable
             LOGGER.catching(failure);
-        } catch (Exception other) { // unknown, unrecoverable
-            throw new PluginFailureException(other);
         }
     }
 
