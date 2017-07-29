@@ -73,6 +73,7 @@ public final class PluginManager {
         plugins.add(new RingPlugin());
         plugins.add(new CasketPlugin());
         plugins.add(new FillItemPlugin());
+        plugins.add(new ObeliskPlugin());
     }
 
     public void init() throws IOException {
