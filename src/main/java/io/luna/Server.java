@@ -63,7 +63,7 @@ public final class Server {
      */
     Server() {
         ExecutorService delegateService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
-            new ThreadFactoryBuilder().setNameFormat("LunaInitializationThread").build());
+                new ThreadFactoryBuilder().setNameFormat("LunaInitializationThread").build());
 
         launchPool = MoreExecutors.listeningDecorator(delegateService);
     }
@@ -115,10 +115,14 @@ public final class Server {
      * Loads and inits all plugins.
      */
     private void initPlugins() {
-        context.getPlugins().load();
-        context.getPlugins().init();
+        try {
+            context.getPlugins().load();
+            context.getPlugins().init();
+        } catch (Exception ex) {
+            LOGGER.catching(ex);
+        }
     }
-    
+
     /**
      * Starts all plugins
      */
