@@ -155,7 +155,7 @@ public abstract class Entity {
         RegionCoordinates next = RegionCoordinates.create(newPosition);
         if (position != null) {
             if (currentRegion.getCoordinates().equals(next)) {
-                plugins.post(new PositionChangeEvent(this, position, newPosition));
+                plugins.fire(new PositionChangeEvent(this, position, newPosition));
                 position = newPosition;
                 return;
             }
@@ -164,7 +164,7 @@ public abstract class Entity {
         currentRegion = world.getRegions().getRegion(next);
         currentRegion.addEntity(this);
 
-        plugins.post(new PositionChangeEvent(this, position, newPosition));
+        plugins.fire(new PositionChangeEvent(this, position, newPosition));
         position = newPosition;
     }
 

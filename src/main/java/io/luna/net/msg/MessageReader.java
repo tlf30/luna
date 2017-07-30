@@ -30,7 +30,7 @@ public abstract class MessageReader {
         try {
             Event evt = read(player, msg); /* Retrieve returned event. */
             if (evt != null) {
-                player.getPlugins().post(evt); /* Forward it to plugins, if possible. */
+                player.getPlugins().fire(evt); /* Forward it to plugins, if possible. */
             }
         } catch (Exception e) {
             LOGGER.catching(e); /* Disconnect player on error. */

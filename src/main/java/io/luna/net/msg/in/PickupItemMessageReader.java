@@ -34,7 +34,7 @@ public final class PickupItemMessageReader extends MessageReader {
         player.submitAction(new DistancedAction<Player>(player, position, 0, true) {
             @Override
             protected void execute() {
-                plugins.post(new PickupItemEvent(player, x, y, id));
+                plugins.fire(new PickupItemEvent(player, x, y, id));
             }
         });
         return null;

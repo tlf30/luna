@@ -276,14 +276,14 @@ public final class Player extends Mob {
 
         queue(new GameChatboxMessageWriter("Welcome to Luna!"));
 
-        plugins.post(new LoginEvent(this));
+        plugins.fire(new LoginEvent(this));
 
         LOGGER.info("{} has logged in.", this);
     }
 
     @Override
     public void onInactive() {
-        plugins.post(new LogoutEvent(this));
+        plugins.fire(new LogoutEvent(this));
 
         PlayerSerializer serializer = new PlayerSerializer(this);
         serializer.asyncSave(service);

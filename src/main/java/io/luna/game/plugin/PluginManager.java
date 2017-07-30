@@ -1,9 +1,7 @@
 package io.luna.game.plugin;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import io.luna.LunaContext;
 import io.luna.game.event.Event;
 import java.io.BufferedReader;
@@ -36,16 +34,44 @@ public final class PluginManager {
      */
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * The context instance.
+     */
     private final LunaContext context;
+    
+    /**
+     * A list of all plugin instances.
+     */
     private List<Plugin> plugins = new ArrayList<>();
-    //
+
+    /**
+     * The name of the plugins directory for searching for JAR files.
+     */
     private final String PLUGIN_DIR = "plugins";
+    /**
+     * The name of the config directory for looking for config files
+     */
     private final String CONFIG_DIR = "config";
 
+    
+    /**
+     * Initilize the PluginManager 
+     * 
+     * @param context The context
+     */
     public PluginManager(LunaContext context) {
         this.context = context;
     }
 
+    /**
+     * Loads each plugin from the Jar files found in the plugins dir.
+     * 
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException 
+     */
     public void load() throws MalformedURLException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         loadDefaultPlugins();
         File pluginDir = new File(PLUGIN_DIR);
@@ -71,6 +97,9 @@ public final class PluginManager {
         }
     }
     
+    /**
+     * Load internal plugins inside Luna server jar.
+     */
     private void loadDefaultPlugins() {
         plugins.add(new AnnouncementsPlugin());
         plugins.add(new RunPlugin());
@@ -84,6 +113,10 @@ public final class PluginManager {
         plugins.add(new LoginPlugin());
     }
 
+    /**
+     * Init plugins prior to server start
+     * @throws IOException 
+     */
     public void init() throws IOException {
         File configDir = new File(CONFIG_DIR);
         if (!configDir.exists()) {
@@ -107,6 +140,9 @@ public final class PluginManager {
         }
     }
 
+    /**
+     * Start each plugin after server is started.
+     */
     public void start() {
         for (Plugin plugin : plugins) {
             try {
@@ -118,12 +154,22 @@ public final class PluginManager {
         }
     }
 
-    public void post(Event event) {
+    /**
+     * Fire <code>Event</code> to each plugin
+     * 
+     * @param event 
+     */
+    public void fire(Event event) {
         for (Plugin plugin : plugins) {
             plugin.event(event);
         }
     }
 
+    /**
+     * Analyzes a class to check if it is an instance of <code>Plugin</code>
+     * @param c The class to analyze
+     * @return if the class is a plugin
+     */
     private boolean isPlugin(Class c) {
         if (c.isSynthetic() || c.isAnnotation() || c.isEnum() || c.isInterface()
                 || c.isLocalClass() || c.isMemberClass() || c.isPrimitive()
@@ -141,6 +187,14 @@ public final class PluginManager {
         return false;
     }
 
+    /**
+     * Analyze a Jar file and get every classpath from it.
+     * 
+     * @param url The URL of the JAR to analyze
+     * @return A array of strings containing the classpaths of each class in the jar
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private String[] getClasses(URL url) throws FileNotFoundException, IOException {
         ArrayList<String> classNames = new ArrayList<>();
         ZipInputStream zip = new ZipInputStream(new FileInputStream(url.getFile())); //Load the jar as a zip for processing

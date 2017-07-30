@@ -42,7 +42,7 @@ public final class ItemOnObjectMessageReader extends MessageReader {
                 player.face(pos);
 
                 PluginManager plugins = player.getPlugins();
-                plugins.post(
+                plugins.fire(
                     new ItemOnObjectEvent(player, itemId, itemIndex, itemInterfaceId, objectId, objectX, objectY));
             }
         });

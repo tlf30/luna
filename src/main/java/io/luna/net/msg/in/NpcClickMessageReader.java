@@ -64,7 +64,7 @@ public final class NpcClickMessageReader extends MessageReader {
             @Override
             protected void execute() {
                 PluginManager plugins = player.getPlugins();
-                plugins.post(evt.apply(player, npc));
+                plugins.fire(evt.apply(player, npc));
 
                 player.interact(npc);
             }

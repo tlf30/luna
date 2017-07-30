@@ -74,7 +74,7 @@ public final class Equipment extends ItemContainer {
          */
         private void sendEvent(Optional<Item> oldItem, Optional<Item> newItem, int index) {
             PluginManager plugins = player.getPlugins();
-            plugins.post(new EquipmentChangeEvent(player, index, oldItem, newItem));
+            plugins.fire(new EquipmentChangeEvent(player, index, oldItem, newItem));
         }
     }
 

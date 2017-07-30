@@ -232,7 +232,7 @@ public final class Skill {
         PluginManager plugins = mob.getPlugins();
 
         SkillChangeEvent evt = new SkillChangeEvent(mob, oldExperience, oldStaticLevel, oldLevel, id);
-        plugins.post(evt);
+        plugins.fire(evt);
     }
 
     /**

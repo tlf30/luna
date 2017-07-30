@@ -59,7 +59,7 @@ public final class ObjectClickMessageReader extends MessageReader {
                 player.getWalkingQueue().clear();
 
                 PluginManager plugins = player.getPlugins();
-                plugins.post(evt);
+                plugins.fire(evt);
             }
         });
     }

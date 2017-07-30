@@ -85,7 +85,7 @@ public final class Server {
         LOGGER.info("Luna is now online on port {}!", box(LunaConstants.PORT));
 
         startPlugins();
-        context.getPlugins().post(ServerLaunchEvent.INSTANCE);
+        context.getPlugins().fire(ServerLaunchEvent.INSTANCE);
     }
 
     /**
