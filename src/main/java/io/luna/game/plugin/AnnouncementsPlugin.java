@@ -41,6 +41,7 @@ public class AnnouncementsPlugin implements Plugin {
     public void init(LunaContext context, File config, JsonElement reader) {
         this.config = config;
         this.context = context;
+        this.reader = reader;
     }
 
     @Override

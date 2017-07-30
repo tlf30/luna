@@ -24,7 +24,7 @@ public class CasketPlugin implements Plugin {
     private final Item CASKET = new Item(405);
     private final Item DEFAULT = new Item(995, 500);
     private final RationalItemTable CASKET_TABLE = new RationalItemTable(
-            new RationalItem(995, Range.closed(0, 3000), Chance.COMMON), // Coins
+            new RationalItem(995, Range.closed(1, 3000), Chance.COMMON), // Coins
             new RationalItem(1623, 1, Chance.COMMON), // Uncut sapphire
             new RationalItem(1621, 1, Chance.UNCOMMON), // Uncut emerald
             new RationalItem(1619, 1, Chance.UNCOMMON), // Uncut ruby
