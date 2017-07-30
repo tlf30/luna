@@ -82,7 +82,7 @@ public class AnnouncementsPlugin implements Plugin {
         }
         return new String[]{"Luna is a Runescape private server for the #317 protocol.",
             "Contribute to Luna at github.org/lare96/luna",
-            "Change these messages in /plugins/world/announcement.scala",
+            "Change these messages in /config/Announcement.json",
             "Any bugs found using Luna should be reported to the github page."};
     }
 
