@@ -74,6 +74,7 @@ public final class PluginManager {
         plugins.add(new CasketPlugin());
         plugins.add(new FillItemPlugin());
         plugins.add(new ObeliskPlugin());
+        plugins.add(new EatFoodPlugin());
     }
 
     public void init() throws IOException {
