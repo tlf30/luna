@@ -1,10 +1,16 @@
 package io.luna.game.plugin;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import io.luna.LunaContext;
 import io.luna.game.event.Event;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -75,6 +81,7 @@ public final class PluginManager {
         plugins.add(new FillItemPlugin());
         plugins.add(new ObeliskPlugin());
         plugins.add(new EatFoodPlugin());
+        plugins.add(new LoginPlugin());
     }
 
     public void init() throws IOException {
@@ -83,12 +90,16 @@ public final class PluginManager {
             configDir.mkdirs();
         }
         for (Plugin plugin : plugins) {
-            File configFile = new File(CONFIG_DIR + File.separator + plugin.getName());
+            File configFile = new File(CONFIG_DIR + File.separator + plugin.getName() + ".json");
             if (!configFile.exists()) {
                 configFile.createNewFile();
             }
+            JsonParser parser = new JsonParser();
+            JsonElement config = parser.parse(new BufferedReader(new FileReader(configFile)));
+            
+            
             try {
-                plugin.init(context, configFile);
+                plugin.init(context, configFile, config);
             } catch (Exception ex) {
                 LOGGER.error("Could not init plugin " + plugin.getName());
                 LOGGER.catching(ex);

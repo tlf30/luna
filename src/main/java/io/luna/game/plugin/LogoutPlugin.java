@@ -1,6 +1,7 @@
 
 package io.luna.game.plugin;
 
+import com.google.gson.JsonElement;
 import io.luna.LunaContext;
 import io.luna.game.event.Event;
 import io.luna.game.event.impl.ButtonClickEvent;
@@ -26,7 +27,7 @@ public class LogoutPlugin implements Plugin {
     }
 
     @Override
-    public void init(LunaContext context, File config) {
+    public void init(LunaContext context, File config, JsonElement reader) {
         this.config = config;
         this.context = context;
     }

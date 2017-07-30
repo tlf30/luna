@@ -1,5 +1,6 @@
 package io.luna.game.plugin;
 
+import com.google.gson.JsonElement;
 import io.luna.LunaContext;
 import io.luna.game.event.Event;
 import io.luna.game.event.impl.ItemClickEvent.ItemFirstClickEvent;
@@ -38,7 +39,7 @@ public class EatFoodPlugin implements Plugin {
     }
 
     @Override
-    public void init(LunaContext context, File config) {
+    public void init(LunaContext context, File config, JsonElement reader) {
         this.config = config;
         this.context = context;
         FOOD_TABLE.put("cooked_meat", new Food(2, 1800, 2142));
@@ -94,7 +95,7 @@ public class EatFoodPlugin implements Plugin {
 
     private void consume(Player plr, Food food, int index) {
         Inventory inv = plr.getInventory();
-        Skill hpSkill = plr.getSkills().getSkill(Skill.HITPOINTS);
+        Skill hpSkill = plr.skill(Skill.HITPOINTS);
         if (System.currentTimeMillis() - (long) plr.getAttributes().get("last_food_consume").get() <= food.delay) {
             return;
         }

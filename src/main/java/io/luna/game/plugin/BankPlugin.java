@@ -1,12 +1,17 @@
 package io.luna.game.plugin;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.luna.LunaContext;
 import io.luna.game.event.Event;
 import io.luna.game.event.impl.ButtonClickEvent;
 import io.luna.game.event.impl.ObjectClickEvent.ObjectFirstClickEvent;
+import io.luna.game.model.item.Item;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -17,6 +22,7 @@ public class BankPlugin implements Plugin {
 
     private LunaContext context;
     private File config;
+    private JsonElement reader;
 
     @Override
     public String getName() {
@@ -29,10 +35,10 @@ public class BankPlugin implements Plugin {
     }
 
     @Override
-    public void init(LunaContext context, File config) {
+    public void init(LunaContext context, File config, JsonElement reader) {
         this.config = config;
         this.context = context;
-        
+        this.reader = reader;
     }
 
     @Override
@@ -58,17 +64,14 @@ public class BankPlugin implements Plugin {
     }
     
     private Integer[] readConfig() {
-        try {
-            byte[] encoded = Files.readAllBytes(config.toPath());
-            String[] lines = new String(encoded).replace("\r", "").split("\n");
-            Integer[] banks = new Integer[lines.length];
-            for (int i = 0; i < banks.length; i++) {
-                banks[i] = Integer.decode(lines[i]);
+        if (reader.isJsonArray()) {
+            ArrayList<Integer> lines = new ArrayList<>();
+            for (JsonElement entry : reader.getAsJsonArray()) {
+                lines.add(entry.getAsInt());
             }
-        } catch (IOException ex) {
-            //
+            return lines.toArray(new Integer[lines.size()]);
         }
-        return new Integer[] {};
+        return new Integer[] {3193, 2213, 3095};
     }
 
 }

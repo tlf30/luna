@@ -1,5 +1,6 @@
 package io.luna.game.plugin;
 
+import com.google.gson.JsonElement;
 import io.luna.LunaContext;
 import io.luna.game.event.Event;
 import io.luna.game.event.impl.ServerLaunchEvent;
@@ -10,6 +11,7 @@ import io.luna.net.msg.out.GameChatboxMessageWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -23,6 +25,7 @@ public class AnnouncementsPlugin implements Plugin {
 
     private LunaContext context;
     private File config;
+    private JsonElement reader;
 
     @Override
     public String getName() {
@@ -35,7 +38,7 @@ public class AnnouncementsPlugin implements Plugin {
     }
 
     @Override
-    public void init(LunaContext context, File config) {
+    public void init(LunaContext context, File config, JsonElement reader) {
         this.config = config;
         this.context = context;
     }
@@ -69,13 +72,17 @@ public class AnnouncementsPlugin implements Plugin {
     }
 
     private String[] readConfig() {
-        try {
-            byte[] encoded = Files.readAllBytes(config.toPath());
-            return new String(encoded).replace("\r", "").split("\n");
-        } catch (IOException ex) {
-            //
+        if (reader.isJsonArray()) {
+            ArrayList<String> lines = new ArrayList<>();
+            for (JsonElement entry : reader.getAsJsonArray()) {
+                lines.add(entry.getAsString());
+            }
+            return lines.toArray(new String[lines.size()]);
         }
-        return new String[] {};
+        return new String[]{"Luna is a Runescape private server for the #317 protocol.",
+            "Contribute to Luna at github.org/lare96/luna",
+            "Change these messages in /plugins/world/announcement.scala",
+            "Any bugs found using Luna should be reported to the github page."};
     }
 
 }

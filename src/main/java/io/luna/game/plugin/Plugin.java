@@ -1,6 +1,7 @@
 
 package io.luna.game.plugin;
 
+import com.google.gson.JsonElement;
 import io.luna.LunaContext;
 import io.luna.game.event.Event;
 import java.io.File;
@@ -33,9 +34,10 @@ public interface Plugin {
      * any pre-runtime setup.
      * 
      * @param context The LunaContext for the server
-     * @param config The configuration file for this plugin
+     * @param configFile The configuration file for this plugin
+     * @param config The JSON representation of the config
      */
-    public void init(LunaContext context, File config);
+    public void init(LunaContext context, File configFile, JsonElement config);
     
     /**
      * Start will be run after the <code>init(LunaContext context)</code>.

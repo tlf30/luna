@@ -1,5 +1,6 @@
 package io.luna.game.plugin;
 
+import com.google.gson.JsonElement;
 import io.luna.LunaContext;
 import io.luna.game.event.Event;
 import io.luna.game.event.impl.ObjectClickEvent.ObjectFirstClickEvent;
@@ -46,7 +47,7 @@ public class ObeliskPlugin implements Plugin {
     }
 
     @Override
-    public void init(LunaContext context, File config) {
+    public void init(LunaContext context, File config, JsonElement reader) {
         this.config = config;
         this.context = context;
         OBELISKS.put(14829, new Obelisk(14829, new Position(3156, 3620), Area.create(3154, 3618, 3158, 3622))); // level 13

@@ -1,6 +1,7 @@
 
 package io.luna.game.plugin;
 
+import com.google.gson.JsonElement;
 import io.luna.LunaContext;
 import io.luna.game.action.ProducingAction;
 import io.luna.game.event.Event;
@@ -39,7 +40,7 @@ public class FillItemPlugin implements Plugin {
     }
 
     @Override
-    public void init(LunaContext context, File config) {
+    public void init(LunaContext context, File config, JsonElement reader) {
         this.config = config;
         this.context = context;
         FILLABLES.put(1923, 1921); //Bowl
