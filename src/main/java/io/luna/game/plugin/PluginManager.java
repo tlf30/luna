@@ -101,16 +101,7 @@ public final class PluginManager {
      * Load internal plugins inside Luna server jar.
      */
     private void loadDefaultPlugins() {
-        plugins.add(new AnnouncementsPlugin());
-        plugins.add(new RunPlugin());
-        plugins.add(new BankPlugin());
-        plugins.add(new LogoutPlugin());
-        plugins.add(new RingPlugin());
-        plugins.add(new CasketPlugin());
-        plugins.add(new FillItemPlugin());
-        plugins.add(new ObeliskPlugin());
-        plugins.add(new EatFoodPlugin());
-        plugins.add(new LoginPlugin());
+        
     }
 
     /**
